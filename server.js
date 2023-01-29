@@ -1,9 +1,11 @@
 import express from 'express'
 import bcrypt from 'bcrypt'
+import cors from 'cors'
 
 const app = express()
 
 app.use(express.json())
+app.use(cors())
 
 const database = {
     users: [
@@ -39,15 +41,15 @@ const database = {
 }
 
 app.get('/', (req, res) => {
-    res.send('working')
+    res.send(database.users)
 })
 
 app.post('/signin', (req, res) => {
-    bcrypt.compare(req.body.password, hash, function(err, result) {
-        // result == true
-    });
+    // bcrypt.compare(req.body.password, hash, function (err, result) {
+    //     // result == true
+    // });
     if (req.body.username === database.users[0].username && req.body.password === database.users[0].password) {
-        res.json('success')
+        res.json(database.users[0])
     } else {
         res.status(400).json('error sign in')
     }
@@ -55,13 +57,12 @@ app.post('/signin', (req, res) => {
 
 app.post('/register', (req, res) => {
     const { username, password } = req.body
-    bcrypt.hash(password, 10, function (err, hash) {
-        // password = hash
-    });
+    // bcrypt.hash(password, 10, function (err, hash) {
+    //     // password = hash
+    // });
     database.users.push({
         id: '4',
         username,
-        password,
         entries: 0,
         joined: new Date()
     })
